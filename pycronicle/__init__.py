@@ -21,6 +21,11 @@ def cprogress(progress):
     print(json.dumps(m))
 
 
+def ctable(table):
+    m = {"table": table}
+    print(json.dumps(m))
+
+
 def cperf(**kwargs):
     m = {"perf": {'scale': 1000, **kwargs}}
     print(json.dumps(m))

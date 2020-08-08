@@ -1,5 +1,10 @@
 import time
 import json
+import inspect
+
+
+def now_msec():
+    return int(time.time() * 1000)
 
 
 def cexit(ret=0, e=None):
@@ -17,21 +22,21 @@ def cprogress(progress):
 
 
 def cperf(**kwargs):
-    m = {"perf": kwargs}
+    m = {"perf": {'scale': 1000, **kwargs}}
     print(json.dumps(m))
 
 
-def now_msec():
-    return int(time.time() * 1000)
-
-
-def cprofile(func):
+def cprofile(f):
     def wrap(*args, **kwargs):
+        spec = inspect.getfullargspec(f).args
+        if spec and spec[0] == 'self':
+            fn = args[0].__class__.__name__
+        else:
+            fn = f.__name__
         started_at = now_msec()
-        result = func(*args, **kwargs)
-        cperf(**{'scale': 1000, func.__name__: now_msec() - started_at})
+        result = f(*args, **kwargs)
+        cperf(**{fn: now_msec() - started_at})
         return result
-
     return wrap
 
 
@@ -41,7 +46,7 @@ def cprofile_named(fname=None):
             fn = f.__name__ if fname is None else fname
             started_at = now_msec()
             result = f(*args, **kwargs)
-            cperf(**{'scale': 1000, fn: now_msec() - started_at})
+            cperf(**{fn: now_msec() - started_at})
             return result
         return wrapped_f
     return wrap

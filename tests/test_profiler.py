@@ -11,7 +11,7 @@ def long_call(n):
     time.sleep(n)
 
 
-@cprofile_named()
+@cprofile_named("blabla")
 def long_call_2(n):
     time.sleep(n)
 
@@ -39,7 +39,7 @@ class TestProfiler(unittest.TestCase):
         self.assertRegex(mock_stdout.getvalue().strip(), expected_output)
 
     def test_cprofile_named(self):
-        self.assert_stdout4(2, r'{"perf": {"scale": 1000, "long_call_2": \d+}}')
+        self.assert_stdout4(2, r'{"perf": {"scale": 1000, "blabla": 2\d+}}')
 
 
 if __name__ == '__main__':

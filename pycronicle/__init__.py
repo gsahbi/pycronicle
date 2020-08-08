@@ -33,3 +33,15 @@ def cprofile(func):
         return result
 
     return wrap
+
+
+def cprofile_named(fname=None):
+    def wrap(f):
+        def wrapped_f(*args, **kwargs):
+            fn = f.__name__ if fname is None else fname
+            started_at = now_msec()
+            result = f(*args, **kwargs)
+            cperf(**{'scale': 1000, fn: now_msec() - started_at})
+            return result
+        return wrapped_f
+    return wrap

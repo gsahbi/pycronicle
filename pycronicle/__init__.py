@@ -11,7 +11,7 @@ def cexit(ret=0, e=None):
     m = {"complete": 1}
     if ret != 0:
         m["code"] = ret
-        m["message"] = "Job failed with " + str(e) if e else "No failure desription"
+        m["description"] = "Job failed with " + str(e) if e else "No failure desription"
     print(json.dumps(m))
     exit(ret)
 

@@ -10,4 +10,4 @@ cp dist/pycronicle-*.whl ../../prod/cronicle/dist
 
 ## clean all
 python setup.py clean --all
-rm -rf data
+rm -rf pycronicle.egg-info

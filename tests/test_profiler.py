@@ -3,7 +3,7 @@ import io
 import unittest
 import unittest.mock
 
-from pycronicle import cprofile, cprogress, cprofile_named
+from pycronicle import cprofile, cprogress, cprofile_named, cperf
 
 
 @cprofile
@@ -20,6 +20,7 @@ class TestProfiler(unittest.TestCase):
     @unittest.mock.patch('sys.stdout', new_callable=io.StringIO)
     def assert_stdout(self, n, expected_output, mock_stdout):
         long_call(n)
+        cperf()
         self.assertRegex(mock_stdout.getvalue().strip(), expected_output)
 
     def test_cprofile(self):
@@ -36,10 +37,11 @@ class TestProfiler(unittest.TestCase):
     @unittest.mock.patch('sys.stdout', new_callable=io.StringIO)
     def assert_stdout4(self, n, expected_output, mock_stdout):
         long_call_2(n)
+        cperf()
         self.assertRegex(mock_stdout.getvalue().strip(), expected_output)
 
     def test_cprofile_named(self):
-        self.assert_stdout4(2, r'{"perf": {"scale": 1000, "blabla": 2\d+}}')
+        self.assert_stdout4(2, r'{"perf": {"scale": 1000, "long_call": 2\d+, "blabla": 2\d+}}')
 
 
 if __name__ == '__main__':
